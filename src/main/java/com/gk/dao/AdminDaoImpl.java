@@ -4,8 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -21,9 +19,11 @@ import com.gk.model.Student;
 public class AdminDaoImpl implements AdminDao {
 
 	@Autowired
-	DataSource datasource;
-	@Autowired
 	JdbcTemplate jdbcTemplate;
+
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
 
 	public void register(Admin user) {
 		String sql = "insert into admin values(?,?,?,?,?,?)";
@@ -74,7 +74,7 @@ public class AdminDaoImpl implements AdminDao {
 		String sql = "insert into book values(?,?,?,?,?,?,?)";
 
 		jdbcTemplate.update(sql, new Object[] { book.getBid(), book.getbName(), book.getbAuther(), book.getIssueDate(),
-				book.getBprize(), book.getDays(),book.getRollNumber() });
+				book.getBprize(), book.getDays(), book.getRollNumber() });
 
 	}
 
@@ -88,16 +88,16 @@ public class AdminDaoImpl implements AdminDao {
 	public void deleteBook(int id) {
 
 		String deleteQuery = "delete from book where bid = ?";
-		jdbcTemplate.update(deleteQuery, id);		
+		jdbcTemplate.update(deleteQuery, id);
 	}
 
 	@Override
 	public Admin viewAdmin() {
-		String contactNumber ="9876453134";
+		String contactNumber = "9876453134";
 		String sql = "SELECT * FROM admin WHERE contactNumber = ?";
 
-        return (Admin) jdbcTemplate.queryForObject( sql,  new Object[]{contactNumber}, 
-            new BeanPropertyRowMapper<Admin>(Admin.class));
+		return (Admin) jdbcTemplate.queryForObject(sql, new Object[] { contactNumber },
+				new BeanPropertyRowMapper<Admin>(Admin.class));
 	}
 }
 
